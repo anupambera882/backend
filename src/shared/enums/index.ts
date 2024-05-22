@@ -8,3 +8,9 @@ export enum ROLE {
   DOCTOR = 'Doctor',
   ADMIN = 'Admin',
 }
+
+export enum STATUS {
+  PENDING = 'Pending',
+  ACCEPTED = 'Accepted',
+  REJECTED = 'Rejected',
+}

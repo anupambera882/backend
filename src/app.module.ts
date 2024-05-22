@@ -5,6 +5,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AppointmentModule } from './modules/appointment/appointment.module';
+import { MessageModule } from './modules/message/message.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { join } from 'path';
     }),
     AuthModule,
     MailModule,
+    AppointmentModule,
+    MessageModule,
   ],
   controllers: [],
   providers: [],

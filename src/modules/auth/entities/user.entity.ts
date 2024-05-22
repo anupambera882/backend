@@ -4,11 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { GENDER, ROLE } from 'src/shared/enums';
+import { Appointment } from 'src/modules/appointment/entities/appointment.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -56,6 +58,12 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn({ select: false })
   updatedAt: Date;
+
+  @ManyToOne(() => Appointment, (appointment) => appointment.doctorDetails)
+  doctorAppointment: Appointment;
+
+  @ManyToOne(() => Appointment, (appointment) => appointment.patientDetails)
+  patientAppointment: Appointment;
 
   @BeforeInsert()
   async hashPassword() {
