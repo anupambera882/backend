@@ -88,16 +88,24 @@ export class AppointmentService {
     };
   }
 
-  async findAll(): Promise<response<PaginationResponse<Appointment>>> {
-    const appointments = await this.appointmentRepository.find();
+  async findAll(
+    limit: number,
+    page: number,
+  ): Promise<response<PaginationResponse<Appointment>>> {
+    const [appointments, total] = await this.appointmentRepository.findAndCount(
+      {
+        take: limit,
+        skip: limit * page,
+      },
+    );
     return {
       statusCode: 200,
       response: {
         data: appointments,
         pagination: {
-          pageNumber: 1,
-          limitCount: 1,
-          total: 2,
+          pageNumber: page,
+          limitCount: limit,
+          total,
         },
       },
       message: 'Appointment Status Updated!',

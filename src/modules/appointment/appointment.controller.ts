@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Put,
+  Query,
 } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -25,8 +26,12 @@ export class AppointmentController {
   }
 
   @Get('getall')
-  findAll() {
-    return this.appointmentService.findAll();
+  findAll(@Query('limit') limit: number, @Query('page') page: number) {
+    [limit, page] = [
+      Math.max(1, limit || parseInt(process.env.PAGE_LIMIT)),
+      Math.max(0, page || 0),
+    ];
+    return this.appointmentService.findAll(limit, page);
   }
 
   @Put('update/:id')
