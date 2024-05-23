@@ -19,6 +19,8 @@ import { response } from '../../shared/interface';
 import { ROLE } from 'src/shared/enums';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
+import { Roles } from 'src/shared/decorators/role.decorator';
+import { RolesGuard } from 'src/shared/guard/role.guard';
 
 @Controller('user')
 export class AuthController {
@@ -41,6 +43,8 @@ export class AuthController {
   }
 
   @Post('admin/addnew')
+  @Roles(ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   createAdmin(
     @Body() registerDto: RegisterDto,
     @Res({ passthrough: true }) res: Response,
@@ -49,6 +53,8 @@ export class AuthController {
   }
 
   @Post('doctor/addnew')
+  @Roles(ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'docAvatar', maxCount: 1 }, ,]),
   )
@@ -74,26 +80,30 @@ export class AuthController {
     return this.authService.getAllDoctors();
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('patient/me')
+  @Roles(ROLE.PATIENT)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   getPatientProfile(@AuthUser() user: any) {
     return this.authService.getLoggedUser(user.userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('admin/me')
+  @Roles(ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   getAdminProfile(@AuthUser() user: any) {
     return this.authService.getLoggedUser(user.userId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('patient/logout')
+  @Roles(ROLE.PATIENT)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   logoutPatient(@Res({ passthrough: true }) res: Response) {
     return this.authService.logoutPatient(res);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('admin/logout')
+  @Roles(ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   logoutAdmin(@Res({ passthrough: true }) res: Response) {
     return this.authService.logoutAdmin(res);
   }

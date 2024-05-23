@@ -1,6 +1,10 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
+import { Roles } from 'src/shared/decorators/role.decorator';
+import { ROLE } from 'src/shared/enums';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/shared/guard/role.guard';
 
 @Controller('message')
 export class MessageController {
@@ -12,6 +16,8 @@ export class MessageController {
   }
 
   @Get('getall')
+  @Roles(ROLE.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   findAll() {
     return this.messageService.findAll();
   }

@@ -9,7 +9,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.use(cookieParser());
   app.enableCors({
-    origin: process.env.FRONT_URL,
+    origin: [process.env.FRONT_URL, process.env.DASHBOARD_URL],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });
